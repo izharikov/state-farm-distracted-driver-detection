@@ -1,0 +1,8 @@
+# image data files
+data
+
+# idea files
+.idea
+
+# python cache
+__pycache__

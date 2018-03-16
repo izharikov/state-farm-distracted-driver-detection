@@ -8,7 +8,7 @@ classes=$(ls)
 for class in *
 do 
    class_dir="../validation/$class"
-   mkdir $class_dir
+   mkdir -p $class_dir
    images=$(shuf -n$per_class -e $class/*.jpg )
    for img in $images
    do

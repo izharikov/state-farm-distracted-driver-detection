@@ -2,19 +2,19 @@
 path_to_data=../data/train
 per_class=150
 
-mkdir -p $path_to_data/validation
+mkdir -p $path_to_data
 cd $path_to_data
-classes=$(ls)
 
+# current dir is /data/train
 for class in *
 do 
    class_dir="../validation/$class"
+   # created dir /data/train/validation/$class
    mkdir -p $class_dir
    images=$(shuf -n$per_class -e $class/*.jpg )
    for img in $images
    do
        mv $img $class_dir
    done
-#| xargs -0 -i echo {}
 done
 

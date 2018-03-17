@@ -15,7 +15,6 @@ cd ../src
 echo [INFO] Running splitting data for train and validation
 ./splitter.sh
 cd ..
-pwd
-echo [INFO] Current folders structure:
+echo [INFO] Folders structure for $(pwd):
 tree -L 3 -I test
 echo Colab configured

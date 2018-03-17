@@ -1,8 +1,10 @@
-#!/bin/bash 
+#!/bin/bash
+mkdir ../../.kaggle
+mv ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle
 pip install keras > /dev/null
 pip install kaggle > /dev/null
-apt-get install tree
-mkdir ../models
+apt-get install tree > /dev/null
+ln -s ../../drive/Colab\ Notebooks ../models
 mkdir ../data && cd ../data
 kaggle competitions download -c state-farm-distracted-driver-detection -p .
 mv state-farm-distracted-driver-detection/* . && rm -rf state-farm-distracted-driver-detection

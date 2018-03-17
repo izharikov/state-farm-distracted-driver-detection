@@ -20,7 +20,8 @@ validation_generator=get_validation_datagen()
 # train the convolutional neural network
 model.fit_generator(generator=train_generator, epochs=20,
                     validation_data=validation_generator,
-                    callbacks=get_callbacks(simple_model_name))
+                    callbacks=get_callbacks(simple_model_name),
+                    verbose=0)
 
 # save the weights
 model.save_weights('driver_state_detection_small_CNN.h5')

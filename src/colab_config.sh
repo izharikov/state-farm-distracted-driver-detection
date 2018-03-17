@@ -3,6 +3,7 @@ mkdir ../../.kaggle
 cp ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle
 echo [INFO] Installing keras and kaggle
 pip install keras > /dev/null
+pip install keras-tqdm > /dev/null
 pip install kaggle > /dev/null
 apt-get install tree > /dev/null
 #ln -s ../models ../../drive/Colab\ Notebooks/models

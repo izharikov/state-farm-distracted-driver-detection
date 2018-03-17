@@ -1,6 +1,6 @@
 #!/bin/bash
 mkdir ../../.kaggle
-mv ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle
+cp ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle
 echo [INFO] Installing keras and kaggle
 pip install keras > /dev/null
 pip install kaggle > /dev/null

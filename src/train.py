@@ -18,7 +18,7 @@ train_generator=get_train_datagen()
 validation_generator=get_validation_datagen()
 
 # train the convolutional neural network
-model.fit_generator(generator=validation_generator, epochs=20,
+model.fit_generator(generator=train_generator, epochs=20,
                     validation_data=validation_generator,
                     callbacks=get_callbacks(simple_model_name))
 

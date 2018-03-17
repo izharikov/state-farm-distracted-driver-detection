@@ -5,7 +5,7 @@ echo [INFO] Installing keras and kaggle
 pip install keras > /dev/null
 pip install kaggle > /dev/null
 apt-get install tree > /dev/null
-ln -s ../../drive/Colab\ Notebooks/models ../models
+#ln -s ../models ../../drive/Colab\ Notebooks/models
 mkdir ../data && cd ../data
 echo [INFO] Downloading data for state-farm-distracted-driver-detection
 kaggle competitions download -c state-farm-distracted-driver-detection -p .

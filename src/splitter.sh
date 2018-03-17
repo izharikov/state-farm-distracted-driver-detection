@@ -2,6 +2,7 @@
 path_to_data=../data/train
 per_class=150
 
+mkdir -p $path_to_data
 cd $path_to_data
 classes=$(ls)
 

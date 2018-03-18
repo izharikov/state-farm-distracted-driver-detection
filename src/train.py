@@ -3,7 +3,7 @@ This program is used to detect the driver's status (10 statuses) by using a smal
 is trained fram scatch using the training images.
 '''
 from config import simple_model_name
-from data_generator import get_train_datagen, get_validation_datagen
+from data_generator.generator import get_train_datagen, get_validation_datagen
 from models.callbacks import get_callbacks
 from models.simple_model import get_model
 

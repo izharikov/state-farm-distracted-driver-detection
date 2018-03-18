@@ -18,7 +18,7 @@ if __name__ == "__main__":
     if mode == "predict":
         path_to_model = myargs['--path_to_model']
         output_file_csv = myargs['--output_file']
-        result = make_prediction(path_to_model, '')
+        result = make_prediction(path_to_model, output_file_csv)
     if mode == "predict_test":
         path_to_model = myargs['--path_to_model']
         output_file_csv = myargs['--output_file']

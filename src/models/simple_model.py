@@ -3,7 +3,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 
 
-def get_model():
+def get_model(print_summary=True):
     # training s small convnet from scatch
     # convnet: a simple stack of 3 convolution layer with ReLU activation and followed by a max-pooling layers
     model = Sequential()
@@ -33,6 +33,7 @@ def get_model():
     # compile the model
     model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
-    model.summary()
+    if (print_summary):
+        model.summary()
 
     return model

@@ -10,3 +10,6 @@ __pycache__
 # models
 /models
 drive
+
+# submision
+*.csv

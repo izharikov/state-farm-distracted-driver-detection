@@ -1,6 +1,6 @@
 #!/bin/bash 
 path_to_data=../data/train
-per_class=150
+per_class=500
 
 mkdir -p $path_to_data
 cd $path_to_data

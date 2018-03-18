@@ -15,9 +15,10 @@ if __name__ == "__main__":
     myargs = getopts()
     mode = myargs['--mode']
     if mode == "predict":
-        path_to_model = myargs['--path_to_model']
-        output_file_csv = myargs['--output_file']
-        result = make_prediction(path_to_model, output_file_csv)
+        path_to_model = myargs.get('--path_to_model')
+        output_file_csv = myargs.get('--output_file')
+        model_type = myargs.get('--model', 'simple')
+        result = make_prediction(path_to_model, output_file_csv, model_type)
     if mode == "predict_test":
         path_to_model = myargs['--path_to_model']
         output_file_csv = myargs['--output_file']

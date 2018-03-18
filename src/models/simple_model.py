@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 
 
@@ -21,7 +21,9 @@ def get_model(print_summary=True):
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
     # the model so far outputs 3D feature maps (height, width, features)
-    model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+    # model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+    model.add(AveragePooling2D())
+    model.add(Flatten())
     model.add(Dense(64))  # 64 neurons
     model.add(Activation('relu'))
     model.add(Dropout(0.5))  # drop 50% of neurons

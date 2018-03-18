@@ -11,7 +11,7 @@ from models import get_model
 from models.callbacks import get_callbacks
 
 
-def train(model_type):
+def train(model_type, num_of_epochs, data_set):
     model = get_model(model_type)
     optimizer = Adam()
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
@@ -23,8 +23,11 @@ def train(model_type):
     # this is the  generator for validation data
     validation_generator = get_validation_datagen()
 
+    if data_set == 'small':
+        train_generator = validation_generator
+
     # train the convolutional neural network
-    model.fit_generator(generator=train_generator, epochs=20,
+    model.fit_generator(generator=train_generator, epochs=num_of_epochs,
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type))
 
@@ -34,4 +37,7 @@ def train(model_type):
 
 if __name__ == "__main__":
     opts = getopts()
-    train(opts['--model'])
+    model_type = opts.get('--model', 'simple')
+    num_of_epochs = int(opts.get('--epochs', '20'))
+    data_set = opts.get('--dataset', 'normal')
+    train(model_type, num_of_epochs, data_set)

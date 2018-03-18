@@ -1,15 +1,17 @@
 from data_generator.generator import get_test_datagen
-from models.simple_model import get_model
 import numpy as np
 
-def load_model(path_to_model):
-    model = get_model(False)
+from models import get_model
+
+
+def load_model(path_to_model, model_type):
+    model = get_model(model_type, False)
     model.load_weights(path_to_model)
     return model
 
 
-def make_prediction(path_to_model, output_file_csv, steps=None):
-    model = load_model(path_to_model)
+def make_prediction(path_to_model, output_file_csv, model_type, steps=None):
+    model = load_model(path_to_model, model_type)
     generator = get_test_datagen()
     result = model.predict_generator(generator=generator, verbose=1, workers=8, use_multiprocessing=True,
                                      steps=steps)

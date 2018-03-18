@@ -31,9 +31,12 @@ def get_model(print_summary=True):
     model.add(Activation('softmax'))
 
     # compile the model
-    model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
+    # model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
     if (print_summary):
         model.summary()
 
     return model
+
+if __name__=="__main__":
+    get_model(True)

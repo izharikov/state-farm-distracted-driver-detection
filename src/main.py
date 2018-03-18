@@ -1,7 +1,8 @@
 from prediction.make_prediction import make_prediction
 
 
-def getopts(argv):
+def getopts():
+    from sys import argv
     opts = {}  # Empty dictionary to store key-value pairs.
     while argv:  # While there are arguments left to parse...
         if argv[0][0] == '-':  # Found a "-name value" pair.
@@ -11,9 +12,7 @@ def getopts(argv):
 
 
 if __name__ == "__main__":
-    from sys import argv
-
-    myargs = getopts(argv)
+    myargs = getopts()
     mode = myargs['--mode']
     if mode == "predict":
         path_to_model = myargs['--path_to_model']

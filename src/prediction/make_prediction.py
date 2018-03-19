@@ -10,9 +10,9 @@ def load_model(path_to_model, model_type):
     return model
 
 
-def make_prediction(path_to_model, output_file_csv, model_type, steps=None):
+def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width = 150):
     model = load_model(path_to_model, model_type)
-    generator = get_test_datagen()
+    generator = get_test_datagen(img_width)
     result = model.predict_generator(generator=generator, verbose=1, workers=8, use_multiprocessing=True,
                                      steps=steps)
     filenames = generator.filenames

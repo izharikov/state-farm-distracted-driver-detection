@@ -3,13 +3,13 @@ from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 
 
-def get_model(print_summary=True):
+def get_model(print_summary=True, img_width = 150):
     # training s small convnet from scatch
     # convnet: a simple stack of 3 convolution layer with ReLU activation and followed by a max-pooling layers
     model = Sequential()
     model.add(Conv2D(filters=32, kernel_size=(3, 3),
                      activation='relu',
-                     input_shape=(150, 150, 3)))
+                     input_shape=(img_width, img_width, 3)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
 
     model.add(Conv2D(32, kernel_size=(3, 3),

@@ -12,14 +12,16 @@ def getopts():
 
 
 if __name__ == "__main__":
-    myargs = getopts()
-    mode = myargs['--mode']
+    opts = getopts()
+    mode = opts['--mode']
     if mode == "predict":
-        path_to_model = myargs.get('--path_to_model')
-        output_file_csv = myargs.get('--output_file')
-        model_type = myargs.get('--model', 'simple')
-        result = make_prediction(path_to_model, output_file_csv, model_type)
+        path_to_model = opts.get('--path_to_model')
+        print('[INFO] Model: ', path_to_model)
+        output_file_csv = opts.get('--output_file')
+        model_type = opts.get('--model', 'simple')
+        width = int(opts.get('--width', '150'))
+        result = make_prediction(path_to_model, output_file_csv, model_type, img_width=width)
     if mode == "predict_test":
-        path_to_model = myargs['--path_to_model']
-        output_file_csv = myargs['--output_file']
+        path_to_model = opts['--path_to_model']
+        output_file_csv = opts['--output_file']
         result = make_prediction(path_to_model, output_file_csv, 10)

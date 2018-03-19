@@ -2,7 +2,7 @@
 This program is used to detect the driver's status (10 statuses) by using a small convolutional neural network, which
 is trained fram scatch using the training images.
 '''
-from keras.optimizers import Adam
+from keras.optimizers import Adam, SGD
 
 from config import simple_model_name
 from data_generator.generator import get_train_datagen, get_validation_datagen
@@ -11,9 +11,11 @@ from models import get_model
 from models.callbacks import get_callbacks
 
 
-def train(model_type, num_of_epochs, data_set, img_width = 150):
+def train(model_type, num_of_epochs, data_set, img_width=150, optimizer='adam'):
     model = get_model(model_type, img_width)
     optimizer = Adam()
+    if optimizer == 'sgd':
+        optimizer = SGD(lr=5e-5,momentum=0.9)
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     # this is the generator that will read images found in sub-folders of 'data/train',
@@ -41,4 +43,5 @@ if __name__ == "__main__":
     num_of_epochs = int(opts.get('--epochs', '20'))
     data_set = opts.get('--dataset', 'normal')
     width = int(opts.get('--width', '150'))
-    train(model_type, num_of_epochs, data_set, img_width=width)
+    optimizer = opts.get('--optimizer', 'adam')
+    train(model_type, num_of_epochs, data_set, img_width=width, optimizer=optimizer)

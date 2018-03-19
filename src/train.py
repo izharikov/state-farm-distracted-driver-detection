@@ -11,12 +11,12 @@ from models import get_model
 from models.callbacks import get_callbacks
 
 
-def train(model_type, num_of_epochs, data_set, img_width=150, optimizer='adam'):
-    model = get_model(model_type, img_width)
-    optimizer = Adam()
-    if optimizer == 'sgd':
-        optimizer = SGD(lr=5e-5,momentum=0.9)
-    model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False):
+    model = get_model(model_type, img_width, print_summary=print_summary)
+    model_opt = Adam()
+    if optimizer_type == 'sgd':
+        model_opt = SGD(lr=5e-5, momentum=0.9)
+    model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 
     # this is the generator that will read images found in sub-folders of 'data/train',
     # and indefinitely generate batches of augmented image data
@@ -44,4 +44,5 @@ if __name__ == "__main__":
     data_set = opts.get('--dataset', 'normal')
     width = int(opts.get('--width', '150'))
     optimizer = opts.get('--optimizer', 'adam')
-    train(model_type, num_of_epochs, data_set, img_width=width, optimizer=optimizer)
+    print_summary = bool(opts.get('--summary', 'False'))
+    train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary)

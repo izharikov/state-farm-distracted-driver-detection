@@ -11,7 +11,8 @@ from models import get_model
 from models.callbacks import get_callbacks
 
 
-def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False):
+def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
+          batch_size=32):
     model = get_model(model_type, img_width, print_summary=print_summary)
     model_opt = Adam()
     if optimizer_type == 'sgd':
@@ -20,10 +21,10 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
 
     # this is the generator that will read images found in sub-folders of 'data/train',
     # and indefinitely generate batches of augmented image data
-    train_generator = get_train_datagen(img_width)
+    train_generator = get_train_datagen(img_width,batch_size)
 
     # this is the  generator for validation data
-    validation_generator = get_validation_datagen(img_width)
+    validation_generator = get_validation_datagen(img_width,batch_size)
 
     if data_set == 'small':
         train_generator = validation_generator
@@ -45,4 +46,6 @@ if __name__ == "__main__":
     width = int(opts.get('--width', '150'))
     optimizer = opts.get('--optimizer', 'adam')
     print_summary = bool(opts.get('--summary', 'False'))
-    train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary)
+    batch_size = int(opts.get('--batch', '32'))
+    train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
+          batch_size=batch_size)

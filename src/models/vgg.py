@@ -22,9 +22,9 @@ def get_model(summary=False, img_width = 150):
 
     # Add the fully-connected layers
     x = Flatten(name='flatten')(output_vgg16_conv)
-    x = Dense(512, activation='relu')(x)
+    x = Dense(4096, activation='relu')(x)
     x = Dropout(0.5)(x)
-    x = Dense(256, activation='relu')(x)
+    x = Dense(4096, activation='relu')(x)
     x = Dropout(0.5)(x)
     x = Dense(10, activation='softmax', name='predictions')(x)
 

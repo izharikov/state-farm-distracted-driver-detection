@@ -12,19 +12,21 @@ from models.callbacks import get_callbacks
 
 
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
-          batch_size=32):
+          batch_size=32, learning_rate=5e-5, weight_path=None):
     model = get_model(model_type, img_width, print_summary=print_summary)
     model_opt = Adam()
     if optimizer_type == 'sgd':
-        model_opt = SGD(lr=5e-4, momentum=0.9)
+        model_opt = SGD(lr=learning_rate, momentum=0.9)
+    if weight_path != None:
+        model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 
     # this is the generator that will read images found in sub-folders of 'data/train',
     # and indefinitely generate batches of augmented image data
-    train_generator = get_train_datagen(img_width,batch_size)
+    train_generator = get_train_datagen(img_width, batch_size)
 
     # this is the  generator for validation data
-    validation_generator = get_validation_datagen(img_width,batch_size)
+    validation_generator = get_validation_datagen(img_width, batch_size)
 
     if data_set == 'small':
         train_generator = validation_generator
@@ -47,5 +49,7 @@ if __name__ == "__main__":
     optimizer = opts.get('--optimizer', 'adam')
     print_summary = bool(opts.get('--summary', 'False'))
     batch_size = int(opts.get('--batch', '32'))
+    lr = float(opts.get('--lr', '5e-5'))
+    weight_path = opts.get('--weight_path', None)
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
-          batch_size=batch_size)
+          batch_size=batch_size, learning_rate=lr, weight_path=weight_path)

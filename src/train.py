@@ -47,7 +47,7 @@ if __name__ == "__main__":
     data_set = opts.get('--dataset', 'normal')
     width = int(opts.get('--width', '150'))
     optimizer = opts.get('--optimizer', 'adam')
-    print_summary = bool(opts.get('--summary', 'False'))
+    print_summary = opts.get('--summary', 'False') == 'True'
     batch_size = int(opts.get('--batch', '32'))
     lr = float(opts.get('--lr', '5e-5'))
     weight_path = opts.get('--weight_path', None)

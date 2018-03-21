@@ -11,7 +11,7 @@ echo [INFO] Downloading data for state-farm-distracted-driver-detection
 kaggle competitions download -c state-farm-distracted-driver-detection -p .
 echo [INFO] Data downloaded
 echo [INFO] Move and unzip images data
-mv state-farm-distracted-driver-detection/* . && rm -rf state-farm-distracted-driver-detection
+mv -v state-farm-distracted-driver-detection/* . && rm -rf state-farm-distracted-driver-detection
 unzip imgs.zip > /dev/null && rm imgs.zip
 echo [INFO] Data unzipped
 cd ../src

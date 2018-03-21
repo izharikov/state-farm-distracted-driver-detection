@@ -1,5 +1,6 @@
 #!/bin/bash
-cp ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle
+cp ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle/kaggle.json
+echo [INFO] Content of the file kaggle.json : $(cat /content/.kaggle/kaggle.json)
 chmod 600 /content/.kaggle/kaggle.json
 echo [INFO] Installing keras and kaggle
 pip install keras > /dev/null

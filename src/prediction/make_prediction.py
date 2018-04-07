@@ -4,14 +4,14 @@ import numpy as np
 from models import get_model
 
 
-def load_model(path_to_model, model_type, img_width):
-    model = get_model(modelType=model_type, print_summary=False, img_width=img_width)
+def load_model(path_to_model, model_type, img_width, fc_layers,dropout):
+    model = get_model(modelType=model_type, print_summary=False, img_width=img_width, fc_layers=fc_layers, dropout=dropout)
     model.load_weights(path_to_model)
     return model
 
 
-def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150):
-    model = load_model(path_to_model, model_type, img_width=img_width)
+def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers = None, dropout=None):
+    model = load_model(path_to_model, model_type, img_width=img_width,fc_layers=fc_layers,dropout=dropout)
     generator = get_test_datagen(img_width)
     result = model.predict_generator(generator=generator, verbose=1, workers=8, use_multiprocessing=True,
                                      steps=steps)

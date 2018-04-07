@@ -20,7 +20,12 @@ if __name__ == "__main__":
         output_file_csv = opts.get('--output_file')
         model_type = opts.get('--model', 'simple')
         width = int(opts.get('--width', '150'))
-        result = make_prediction(path_to_model, output_file_csv, model_type, img_width=width)
+        fc_layers = int(opts.get('--fc', 2))
+        fc_width = int(opts.get('--fc_dim', 4096))
+        dropout = int(opts.get('--dropout', 0.5))
+        result = make_prediction(path_to_model, output_file_csv, model_type, img_width=width,
+                                 fc_layers=[fc_width] * fc_layers,
+                                 dropout=[dropout] * fc_layers)
     if mode == "predict_test":
         path_to_model = opts['--path_to_model']
         output_file_csv = opts['--output_file']

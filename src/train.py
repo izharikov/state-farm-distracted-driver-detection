@@ -14,7 +14,9 @@ from models.callbacks import get_callbacks
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
           batch_size=32, learning_rate=5e-5, weight_path=None):
     model = get_model(model_type, img_width, print_summary=print_summary)
-    model_opt = Adam()
+    model_opt = None
+    if optimizer_type == 'adam':
+        model_opt = Adam(lr=learning_rate)
     if optimizer_type == 'sgd':
         model_opt = SGD(lr=learning_rate, momentum=0.9)
     if weight_path != None:

@@ -3,10 +3,10 @@
 Implementation of [Kaggle driver detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection)
 ## CNN Models implemented 
 - [simple model](src/models/simple_model.py)
-- [vgg16](src/models/vgg16.py)
-- [vgg19](src/models/vgg19.py)
-- [inception v3](src/models/inception_v3.py)
-- [xception](src/models/xception.py)
+- [vgg16](src/models/vgg16.py) - input shape `224×224` 
+- [vgg19](src/models/vgg19.py) - input shape `224×224` 
+- [inception v3](src/models/inception_v3.py) - input shape `299×299`
+- [xception](src/models/xception.py) - input shape `299×299` 
 ## Train and evaluate
 ### Downloading and splitting data
 Using `kaggle` API:

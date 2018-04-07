@@ -42,7 +42,8 @@ Count of fully connected layers, used in fine-tuning. Default is 2.
 Dimension of fully connected layers. Default is 4096.
 * `--dropout <dropout>`<br>
 Dropout after each fully-connected layer. If `< 0`, than no dropout layers added. Default is 0.5.
-
+* `--batch <batch>`<br>
+Batch size in train process. Default is 32.
 ### Evaluation
 Files `predict.sh` and `predict-all.sh`.
 #### predict.sh

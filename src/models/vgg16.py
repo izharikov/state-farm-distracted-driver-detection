@@ -5,8 +5,10 @@ from keras.layers import Input, Flatten, Dense, Dropout
 from keras.models import Model
 import numpy as np
 
+from models.fc_layers import add_fc_layers
 
-def get_model(summary=False, img_width = 150):
+
+def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_layers=[0.5, 0.5]):
     # Get back the convolutional part of a VGG network trained on ImageNet
     vgg_16_model = VGG16(weights='imagenet', include_top=False)
     if summary:
@@ -22,10 +24,7 @@ def get_model(summary=False, img_width = 150):
 
     # Add the fully-connected layers
     x = Flatten(name='flatten')(output_vgg16_conv)
-    x = Dense(4096, activation='relu')(x)
-    x = Dropout(0.5)(x)
-    x = Dense(4096, activation='relu')(x)
-    x = Dropout(0.5)(x)
+    x = add_fc_layers(x, fc_layers, fc_dropout_layers)
     x = Dense(10, activation='softmax', name='predictions')(x)
 
     # Create your own model
@@ -34,5 +33,6 @@ def get_model(summary=False, img_width = 150):
         my_model.summary()
     return my_model
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     get_model(True, 224)

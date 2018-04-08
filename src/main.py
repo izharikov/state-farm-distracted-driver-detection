@@ -22,7 +22,7 @@ if __name__ == "__main__":
         width = int(opts.get('--width', '150'))
         fc_layers = int(opts.get('--fc', 2))
         fc_width = int(opts.get('--fc_dim', 4096))
-        dropout = int(opts.get('--dropout', 0.5))
+        dropout = float(opts.get('--dropout', 0.5))
         result = make_prediction(path_to_model, output_file_csv, model_type, img_width=width,
                                  fc_layers=[fc_width] * fc_layers,
                                  dropout=[dropout] * fc_layers)

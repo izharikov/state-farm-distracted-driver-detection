@@ -57,7 +57,7 @@ if __name__ == "__main__":
     weight_path = opts.get('--weight_path', None)
     fc_layers = int(opts.get('--fc', 2))
     fc_width = int(opts.get('--fc_dim', 4096))
-    dropout = int(opts.get('--dropout', 0.5))
+    dropout = float(opts.get('--dropout', 0.5))
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
           dropout=[dropout] * fc_layers)

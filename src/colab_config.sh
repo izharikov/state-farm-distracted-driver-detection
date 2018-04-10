@@ -14,8 +14,10 @@ echo [INFO] Data downloaded
 echo [INFO] Move and unzip images data
 mv -v state-farm-distracted-driver-detection/* . && rm -rf state-farm-distracted-driver-detection
 unzip imgs.zip > /dev/null && rm imgs.zip
+unzip sample_submission.csv.zip
 echo [INFO] Data unzipped
 cd ../src
+ln -s ../data/ input
 echo [INFO] Running splitting data for train and validation
 ./splitter.sh
 cd ..

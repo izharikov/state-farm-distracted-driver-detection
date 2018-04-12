@@ -55,7 +55,7 @@ def get_im(path, img_rows, img_cols, color_type=1):
 
 def get_driver_data():
     dr = dict()
-    path = os.path.join('..', 'input', 'driver_imgs_list.csv')
+    path = os.path.join('/content', 'state-farm-distracted-driver-detection', 'data', 'driver_imgs_list.csv')
     print('Read drivers data')
     f = open(path, 'r')
     line = f.readline()
@@ -79,7 +79,7 @@ def load_train(img_rows, img_cols, color_type=1):
     print('Read train images')
     for j in range(10):
         print('Load folder c{}'.format(j))
-        path = os.path.join('..', 'input', 'imgs', 'train',
+        path = os.path.join('/content', 'state-farm-distracted-driver-detection', 'data', 'train',
                             'c' + str(j), '*.jpg')
         files = glob.glob(path)
         for fl in files:
@@ -97,7 +97,7 @@ def load_train(img_rows, img_cols, color_type=1):
 
 def load_test(img_rows, img_cols, color_type=1):
     print('Read test images')
-    path = os.path.join('..', 'input', 'imgs', 'test', '*.jpg')
+    path = os.path.join('/content', 'state-farm-distracted-driver-detection', 'data', 'test', '*.jpg')
     files = glob.glob(path)
     X_test = []
     X_test_id = []
@@ -141,15 +141,15 @@ def save_model(model, index, cross=''):
         os.mkdir('cache')
     json_name = 'architecture' + str(index) + cross + '.json'
     weight_name = 'model_weights' + str(index) + cross + '.h5'
-    open(os.path.join('cache', json_name), 'w').write(json_string)
+    open(os.path.join('/content', 'drive', 'cache', json_name), 'w').write(json_string)
     model.save_weights(os.path.join('/content/drive/models/', weight_name), overwrite=True)
 
 
 def read_model(index, cross=''):
     json_name = 'architecture' + str(index) + cross + '.json'
     weight_name = 'model_weights' + str(index) + cross + '.h5'
-    model = model_from_json(open(os.path.join('cache', json_name)).read())
-    model.load_weights(os.path.join('cache', weight_name))
+    model = model_from_json(open(os.path.join('/content', 'drive', 'cache', json_name)).read())
+    model.load_weights(os.path.join('/content', 'drive', 'cache', weight_name))
     return model
 
 
@@ -171,14 +171,14 @@ def create_submission(predictions, test_id, info):
     if not os.path.isdir('subm'):
         os.mkdir('subm')
     suffix = info + '_' + str(now.strftime("%Y-%m-%d-%H-%M"))
-    sub_file = os.path.join('subm', 'submission_' + suffix + '.csv')
+    sub_file = os.path.join('/content', 'drive', 'submissions', 'submission_' + suffix + '.csv')
     result1.to_csv(sub_file, index=False)
 
 
 def read_and_normalize_and_shuffle_train_data(img_rows, img_cols,
                                               color_type=1):
 
-    cache_path = os.path.join('cache', 'train_r_' + str(img_rows) +
+    cache_path = os.path.join('/content', 'drive', 'cache', 'train_r_' + str(img_rows) +
                               '_c_' + str(img_cols) + '_t_' +
                               str(color_type) + '.dat')
 
@@ -216,7 +216,7 @@ def read_and_normalize_and_shuffle_train_data(img_rows, img_cols,
 
 
 def read_and_normalize_test_data(img_rows=224, img_cols=224, color_type=1):
-    cache_path = os.path.join('cache', 'test_r_' + str(img_rows) +
+    cache_path = os.path.join('/content', 'drive', 'cache', 'test_r_' + str(img_rows) +
                               '_c_' + str(img_cols) + '_t_' +
                               str(color_type) + '.dat')
     if not os.path.isfile(cache_path) or use_cache == 0:
@@ -328,7 +328,7 @@ def vgg_std16_model(img_rows, img_cols, color_type=1):
     model.add(Dropout(0.5))
     model.add(Dense(1000, activation='softmax'))
 
-    model.load_weights('../input/vgg16_weights.h5')
+    model.load_weights('/content/drive/cache/vgg16_weights.h5')
 
     # Code above loads pre-trained data and
     model.layers.pop()

@@ -15,6 +15,7 @@ echo [INFO] Move and unzip images data
 mv -v state-farm-distracted-driver-detection/* . && rm -rf state-farm-distracted-driver-detection
 unzip imgs.zip > /dev/null && rm imgs.zip
 unzip sample_submission.csv.zip
+unzip driver_imgs_list.csv.zip
 echo [INFO] Data unzipped
 cd ../src
 ln -s ../data/ input

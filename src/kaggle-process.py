@@ -132,6 +132,7 @@ def restore_data(path):
         print('Restore data from pickle........')
         file = open(path, 'rb')
         data = pickle.load(file)
+        print('Restored data from pickle........')
     return data
 
 

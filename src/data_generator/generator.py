@@ -9,7 +9,7 @@ def get_train_datagen(img_width, batch_size=32):
     # this is the generator that will read images found in sub-folders of 'data/train',
     # and indefinitely generate batches of augmented image data
     train_generator = train_datagen.flow_from_directory(train_dir, target_size=(img_width, img_width),
-                                                        batch_size=batch_size, class_mode='categorical')
+                                                        batch_size=batch_size, class_mode='categorical', shuffle=True)
     return train_generator
 
 
@@ -19,7 +19,8 @@ def get_validation_datagen(img_width, batch_size=32):
 
     # this is the  generator for validation data
     validation_generator = test_datagen.flow_from_directory(validation_dir, target_size=(img_width, img_width),
-                                                            batch_size=batch_size, class_mode='categorical')
+                                                            batch_size=batch_size,
+                                                            class_mode='categorical', shuffle = True)
     return validation_generator
 
 

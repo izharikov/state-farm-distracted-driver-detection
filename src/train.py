@@ -1,18 +1,13 @@
-'''
-This program is used to detect the driver's status (10 statuses) by using a small convolutional neural network, which
-is trained fram scatch using the training images.
-'''
-from keras.optimizers import Adam, SGD, RMSprop
+from keras.optimizers import Adam, SGD, RMSprop, Nadam
 
-from config import simple_model_name
-from data_generator.generator import get_train_datagen, get_validation_datagen
+from data_generator.generator import get_train_datagen, get_validation_datagen, train_gen, valid_gen
 from main import getopts
 from models import get_model
 from models.callbacks import get_callbacks
 
 
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
-          batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None):
+          batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None, generator='default'):
     model = get_model(model_type, img_width, print_summary=print_summary, fc_layers=fc_layers, dropout=dropout)
     model_opt = None
     if optimizer_type == 'adam':
@@ -21,6 +16,8 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
         model_opt = SGD(lr=learning_rate, momentum=0.9)
     if optimizer_type == 'rmsprop':
         model_opt = RMSprop(lr=learning_rate)
+    if optimizer_type == 'nadam':
+        model_opt = Nadam()
     if weight_path != None:
         model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
@@ -32,11 +29,14 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     # this is the  generator for validation data
     validation_generator = get_validation_datagen(img_width, batch_size)
 
-    if data_set == 'small':
-        train_generator = validation_generator
+    if generator == 'custom':
+        train_generator = train_gen(img_width, batch_size)
+        validation_generator = valid_gen(img_width, batch_size)
+
 
     # train the convolutional neural network
     model.fit_generator(generator=train_generator, epochs=num_of_epochs,
+                        workers=8,max_q_size=40, use_multiprocessing=True,
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type))
 
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     fc_layers = int(opts.get('--fc', 2))
     fc_width = int(opts.get('--fc_dim', 4096))
     dropout = float(opts.get('--dropout', 0.5))
+    generator = opts.get('--generator', 'default')
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          dropout=[dropout] * fc_layers)
+          dropout=[dropout] * fc_layers, generator=generator)

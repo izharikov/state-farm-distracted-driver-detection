@@ -130,15 +130,6 @@ def get_im_cv2_aug(path, img_size):
     hshift = random.uniform(-0.1, 0.1)
     img = shift(img, wshift, hshift)
 
-    # change HSV
-    # img = randomHueSaturationValue(img)
-
-    # PCA
-    # img = img/255.0
-    # l, v = RGB_PCA(img)
-    # img = RGB_variations(img, l, v)
-    # img = img * 255.0
-
     # reduce size
     img = cv2.resize(img, (img_size, img_size))
 

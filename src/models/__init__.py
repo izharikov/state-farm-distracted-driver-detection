@@ -1,4 +1,4 @@
-from models import simple_model, vgg16, vgg19, inception_v3, xception
+from models import simple_model, vgg16, vgg19, inception_v3, xception, resnet50, resnet152
 
 
 def get_model(modelType, img_width, print_summary=False, fc_layers=None, dropout=None):
@@ -12,4 +12,8 @@ def get_model(modelType, img_width, print_summary=False, fc_layers=None, dropout
         return inception_v3.get_model(print_summary, img_width, fc_layers, dropout)
     if modelType == 'xception':
         return xception.get_model(print_summary, img_width, fc_layers, dropout)
+    if modelType == 'resnet50':
+        return resnet50.get_model(print_summary, img_width, fc_layers, dropout)
+    if modelType == 'resnet152':
+        return resnet152.get_model(print_summary, img_width, fc_layers, dropout)
     return None

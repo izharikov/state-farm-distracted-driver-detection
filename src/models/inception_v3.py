@@ -1,6 +1,6 @@
 from keras.applications.inception_v3 import InceptionV3
 from keras.preprocessing import image
-from keras.layers import Input, Flatten, Dense, Dropout
+from keras.layers import Input, Flatten, Dense, Dropout, regularizers
 from keras.models import Model
 from keras.layers import Dense, GlobalAveragePooling2D
 
@@ -24,8 +24,8 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     # Add the fully-connected layers
 
     x = GlobalAveragePooling2D(name='avg_pool')(output_inception_conv)
-    x = add_fc_layers(x, fc_layers, fc_dropout_layers)
-    x = Dense(10, activation='softmax', name='predictions')(x)
+    x = Dropout(0.5)(x)
+    x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
 
     # Create your own model
     my_model = Model(input=inception_v3_model.input, output=x)

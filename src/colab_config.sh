@@ -20,7 +20,7 @@ echo [INFO] Data unzipped
 cd ../src
 ln -s ../data/ input
 echo [INFO] Running splitting data for train and validation
-./splitter.sh
+# ./splitter.sh
 cd ..
 echo [INFO] Folders structure for $(pwd):
 tree -L 3 -I test

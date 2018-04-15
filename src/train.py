@@ -22,21 +22,19 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
         model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 
-    # this is the generator that will read images found in sub-folders of 'data/train',
-    # and indefinitely generate batches of augmented image data
-    train_generator = get_train_datagen(img_width, batch_size)
-
-    # this is the  generator for validation data
-    validation_generator = get_validation_datagen(img_width, batch_size)
-
     if generator == 'custom':
         train_generator = train_gen(img_width, batch_size)
         validation_generator = valid_gen(img_width, batch_size)
+    else:
+        train_generator = get_train_datagen(img_width, batch_size)
 
+        validation_generator = get_validation_datagen(img_width, batch_size)
 
     # train the convolutional neural network
     model.fit_generator(generator=train_generator, epochs=num_of_epochs,
-                        workers=8,max_q_size=40, use_multiprocessing=True,
+                        steps_per_epoch=286,
+                        validation_steps=52,
+                        workers=8, max_q_size=40, use_multiprocessing=True,
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type))
 

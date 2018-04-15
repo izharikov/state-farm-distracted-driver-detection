@@ -3,7 +3,7 @@ import random
 import cv2
 from keras.preprocessing.image import ImageDataGenerator
 
-from config import train_dir, validation_dir, test_dir
+from config import train_dir, validation_dir, test_dir, data_path
 import numpy as np
 import os
 
@@ -14,7 +14,7 @@ unique_list_valid = ['p002', 'p012', 'p014', 'p015']
 # print (unique_list_train, unique_list_valid)
 
 # get index: driver_id, class, image name
-index = os.path.join('../../data', 'driver_imgs_list.csv')
+index = os.path.join(data_path, 'driver_imgs_list.csv')
 
 # build the driver id dictionary and class dictionary
 f = open(index, 'r')

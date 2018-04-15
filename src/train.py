@@ -20,7 +20,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
         model_opt = Nadam()
     if weight_path != None:
         model.load_weights(weight_path)
-    model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['categorical_accuracy'])
 
     if generator == 'custom':
         train_generator = train_gen(img_width, batch_size)

@@ -19,7 +19,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
         model_opt = RMSprop(lr=learning_rate)
     if optimizer_type == 'nadam':
         model_opt = Nadam(lr=learning_rate)
-    if weight_path != None:
+    if weight_path is not None and len(weight_path) > 0:
         model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 

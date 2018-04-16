@@ -4,7 +4,7 @@ from data_generator.generator import get_train_datagen, get_validation_datagen, 
 from main import getopts
 from models import get_model
 from models.callbacks import get_callbacks
-
+num_of_imgs=21794
 
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
           batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None, generator='default',
@@ -33,8 +33,8 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
 
     # train the convolutional neural network
     model.fit_generator(generator=train_generator, epochs=num_of_epochs,
-                        steps_per_epoch=286,
-                        validation_steps=52,
+                        steps_per_epoch=18304 / batch_size,
+                        validation_steps=3328 / batch_size,
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type, learning_rate, dyn_lr),
                         initial_epoch=initial_epoch)

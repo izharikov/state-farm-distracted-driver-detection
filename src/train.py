@@ -7,7 +7,8 @@ from models.callbacks import get_callbacks
 
 
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
-          batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None, generator='default'):
+          batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None, generator='default',
+          dyn_lr=False, initial_epoch=0):
     model = get_model(model_type, img_width, print_summary=print_summary, fc_layers=fc_layers, dropout=dropout)
     model_opt = None
     if optimizer_type == 'adam':
@@ -17,7 +18,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     if optimizer_type == 'rmsprop':
         model_opt = RMSprop(lr=learning_rate)
     if optimizer_type == 'nadam':
-        model_opt = Nadam()
+        model_opt = Nadam(lr=learning_rate)
     if weight_path != None:
         model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
@@ -35,7 +36,8 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
                         steps_per_epoch=286,
                         validation_steps=52,
                         validation_data=validation_generator,
-                        callbacks=get_callbacks(model_type))
+                        callbacks=get_callbacks(model_type, learning_rate, dyn_lr),
+                        initial_epoch=initial_epoch)
 
     # save the weights
     # model.save_weights('driver_state_detection_small_CNN.h5')
@@ -56,6 +58,8 @@ if __name__ == "__main__":
     fc_width = int(opts.get('--fc_dim', 4096))
     dropout = float(opts.get('--dropout', 0.5))
     generator = opts.get('--generator', 'default')
+    dyn_lr = opts.get('--dyn_lr', 'False') == 'True'
+    initial_epoch = int(opts.get('--initial_epoch', 0))
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          generator=generator)
+          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch)

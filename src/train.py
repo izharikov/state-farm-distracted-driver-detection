@@ -34,7 +34,6 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     model.fit_generator(generator=train_generator, epochs=num_of_epochs,
                         steps_per_epoch=286,
                         validation_steps=52,
-                        workers=8, max_q_size=40, use_multiprocessing=True,
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type))
 
@@ -59,4 +58,4 @@ if __name__ == "__main__":
     generator = opts.get('--generator', 'default')
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          dropout=[dropout] * fc_layers, generator=generator)
+          generator=generator)

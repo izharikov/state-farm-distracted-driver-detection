@@ -24,4 +24,5 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
 
 
 if __name__ == "__main__":
-    get_model(True, 299)
+    model = get_model(True, 299)
+    print('Layers', len(model.layers))

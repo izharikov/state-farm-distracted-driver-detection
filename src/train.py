@@ -24,8 +24,8 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 
     if generator == 'custom':
-        train_generator = train_gen(img_width, batch_size)
-        validation_generator = valid_gen(img_width, batch_size)
+        train_generator = train_gen(img_width, batch_size, model_type)
+        validation_generator = valid_gen(img_width, batch_size, model_type)
     else:
         train_generator = get_train_datagen(img_width, batch_size)
 

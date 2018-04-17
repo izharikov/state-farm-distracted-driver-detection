@@ -12,7 +12,7 @@ def load_model(path_to_model, model_type, img_width, fc_layers,dropout):
 
 def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers = None, dropout=None):
     model = load_model(path_to_model, model_type, img_width=img_width,fc_layers=fc_layers,dropout=dropout)
-    generator = get_test_datagen(img_width)
+    generator = get_test_datagen(img_width, model_type)
     result = model.predict_generator(generator=generator, verbose=1, workers=8, use_multiprocessing=True,
                                      steps=steps)
     filenames = generator.filenames

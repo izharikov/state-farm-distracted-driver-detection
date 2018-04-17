@@ -1,8 +1,10 @@
 import random
 
 import cv2
+import keras
 from keras.preprocessing.image import ImageDataGenerator
 
+import models
 from config import train_dir, validation_dir, test_dir, data_path
 import numpy as np
 import os
@@ -115,7 +117,7 @@ def randomHueSaturationValue(image, hue_shift_limit=(-10, 10),
     return image
 
 
-def get_im_cv2_aug(path, img_size):
+def get_im_cv2_aug(path, img_size, model_type):
     img = cv2.imread(path)
     img = np.array(img, dtype=np.float32)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -134,23 +136,33 @@ def get_im_cv2_aug(path, img_size):
     img = cv2.resize(img, (img_size, img_size))
 
     # normalization
-
-    img /= 127.5
-    img -= 1.
+    if model_type == 'xception':
+        img /= 127.5
+        img -= 1.
+    if model_type == 'resnet152' or model_type == 'resnet50':
+        img[:, :, 0] -= 103.939
+        img[:, :, 1] -= 116.779
+        img[:, :, 2] -= 123.68
 
     return img
 
 
-def get_im_cv2(path, img_size):
+def get_im_cv2(path, img_size, model_type):
     img = cv2.imread(path)
     img = np.array(img, dtype=np.float32)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # reduce size
     img = cv2.resize(img, (img_size, img_size))
     # normalization
-    img /= 127.5
-    img -= 1.
-    # print (img[1:5, 1:5, 0])
+
+    # normalization
+    if model_type == 'xception':
+        img /= 127.5
+        img -= 1.
+    if model_type == 'resnet152' or model_type == 'resnet50':
+        img[:, :, 0] -= 103.939
+        img[:, :, 1] -= 116.779
+        img[:, :, 2] -= 123.68
     return img
 
 
@@ -164,7 +176,7 @@ def one_hot_encode(x):
     return lb.transform(x)
 
 
-def train_gen(img_size, batch_size):
+def train_gen(img_size, batch_size, model_type):
     current = 0
     while 1:
         x = []
@@ -173,12 +185,12 @@ def train_gen(img_size, batch_size):
             line = train_list[current]
             arr = line.strip().split(',')
             path1 = os.path.join(train_dir, str(arr[1]), str(arr[2]))
-            img = get_im_cv2_aug(path1, img_size)
+            img = get_im_cv2_aug(path1, img_size, model_type)
             if random.random() > 0.5:
                 line2 = random.choice(class_dict[arr[1]])
                 bname = line2.strip().split(',')[2]
                 path2 = os.path.join(train_dir, str(arr[1]), str(bname))
-                img2 = get_im_cv2_aug(path2, img_size)
+                img2 = get_im_cv2_aug(path2, img_size, model_type)
                 left = img[:, :150, :]
                 right = img2[:, 150:, :]
                 img = np.concatenate((left, right), axis=1)
@@ -196,7 +208,7 @@ def train_gen(img_size, batch_size):
         yield (x, y)
 
 
-def valid_gen(img_size, batch_size):
+def valid_gen(img_size, batch_size, model_type):
     current = 0
     while 1:
         x = []
@@ -206,7 +218,7 @@ def valid_gen(img_size, batch_size):
             arr = line.strip().split(',')
             path = os.path.join(train_dir, str(arr[1]), str(arr[2]))
             # print (path)
-            img = get_im_cv2(path, img_size)
+            img = get_im_cv2(path, img_size, model_type)
             x.append(img)
             label = one_hot_encode([str(arr[1])])[0]
             y.append(label)
@@ -242,8 +254,19 @@ def get_validation_datagen(img_width, batch_size=32):
     return validation_generator
 
 
-def get_test_datagen(img_width):
-    test_datagen = ImageDataGenerator(rescale=1.0 / 255)
+def get_test_datagen(img_width, model_type):
+    preprocess_input = None
+    if model_type == 'xception':
+        preprocess_input = keras.applications.xception.preprocess_input
+    if model_type == 'resnet152':
+        preprocess_input = models.resnet152.resnet152_keras_impl.preprocess_input
+    if model_type == 'resnet50':
+        preprocess_input = keras.applications.resnet50.preprocess_input
+    if model_type == 'inception_v3':
+        preprocess_input = keras.applications.inception_v3.preprocess_input
+    if preprocess_input is None:
+        preprocess_input = keras.applications.vgg16.preprocess_input
+    test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
     # this is the  generator for validation data
     validation_generator = test_datagen.flow_from_directory(test_dir, target_size=(img_width, img_width),

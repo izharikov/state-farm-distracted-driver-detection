@@ -2,7 +2,7 @@ import random
 
 import cv2
 import keras
-from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator, array_to_img
 
 import models
 from config import train_dir, validation_dir, test_dir, data_path
@@ -232,27 +232,20 @@ def valid_gen(img_size, batch_size, model_type):
         yield (x, y)
 
 
+# batch_size_index = 0
+
+
 def test_gen(img_size, batch_size, model_type):
-    current = 0
+    batch_size_index = 0
     while 1:
         x = []
-        y = []
-        while len(y) < batch_size:
-            line = valid_list[current]
-            arr = line.strip().split(',')
-            path = os.path.join(test_dir, str(arr[1]), str(arr[2]))
-            img = get_im_cv2(path, img_size, model_type)
+        for filename in os.listdir(test_dir)[batch_size_index * batch_size:batch_size * (batch_size_index + 1)]:
+            img = get_im_cv2(os.path.join(test_dir, filename), img_size, model_type)
             x.append(img)
-            label = one_hot_encode([str(arr[1])])[0]
-            y.append(label)
-            current += 1
-            if current >= len(valid_list):
-                current = 0
         x = np.array(x)
+        batch_size_index = batch_size_index + 1
         x = x.reshape(batch_size, img_size, img_size, 3)
-        y = np.array(y, dtype=np.uint8)
-        y = y.reshape(batch_size, 10)
-        yield (x, y)
+        yield (x)
 
 
 def get_train_datagen(img_width, batch_size=32):
@@ -277,6 +270,16 @@ def get_validation_datagen(img_width, batch_size=32):
     return validation_generator
 
 
+def convert_to_prep_fnc(preprocess_input):
+    def prep_real(img):
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        x = preprocess_input(x)
+        return array_to_img(x)
+
+    return prep_real
+
+
 def get_test_datagen(img_width, model_type):
     preprocess_input = None
     if model_type == 'xception':
@@ -289,9 +292,12 @@ def get_test_datagen(img_width, model_type):
         preprocess_input = keras.applications.inception_v3.preprocess_input
     if preprocess_input is None:
         preprocess_input = keras.applications.vgg16.preprocess_input
+    # else:
+    #     preprocess_input = convert_to_prep_fnc(preprocess_input)
     test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
     # this is the  generator for validation data
     validation_generator = test_datagen.flow_from_directory(test_dir, target_size=(img_width, img_width),
+                                                            batch_size=1,
                                                             shuffle=False, class_mode=None, classes=[''])
     return validation_generator

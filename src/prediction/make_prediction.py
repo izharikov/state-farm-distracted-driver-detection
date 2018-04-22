@@ -1,5 +1,7 @@
+from config import test_dir
 from data_generator.generator import get_test_datagen, test_gen
 import numpy as np
+import os
 
 from models import get_model
 
@@ -9,13 +11,14 @@ def load_model(path_to_model, model_type, img_width, fc_layers,dropout):
     model.load_weights(path_to_model)
     return model
 
+num_test_samples = 79726
 
 def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers = None, dropout=None):
     model = load_model(path_to_model, model_type, img_width=img_width,fc_layers=fc_layers,dropout=dropout)
-    generator = test_gen(img_width, 64, model_type)
-    result = model.predict_generator(generator=generator, verbose=1, workers=8, use_multiprocessing=True,
-                                     steps=steps)
-    filenames = generator.filenames
+    generator = test_gen(img_width, 2, model_type)
+    result = model.predict_generator(generator=generator, verbose=1,
+                                     steps=num_test_samples / 2)
+    filenames = os.listdir(test_dir)
     if (steps is not None):
         filenames = filenames[0:steps * generator.batch_size]
     f = open(output_file_csv, 'wt')

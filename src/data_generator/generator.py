@@ -232,6 +232,29 @@ def valid_gen(img_size, batch_size, model_type):
         yield (x, y)
 
 
+def test_gen(img_size, batch_size, model_type):
+    current = 0
+    while 1:
+        x = []
+        y = []
+        while len(y) < batch_size:
+            line = valid_list[current]
+            arr = line.strip().split(',')
+            path = os.path.join(test_dir, str(arr[1]), str(arr[2]))
+            img = get_im_cv2(path, img_size, model_type)
+            x.append(img)
+            label = one_hot_encode([str(arr[1])])[0]
+            y.append(label)
+            current += 1
+            if current >= len(valid_list):
+                current = 0
+        x = np.array(x)
+        x = x.reshape(batch_size, img_size, img_size, 3)
+        y = np.array(y, dtype=np.uint8)
+        y = y.reshape(batch_size, 10)
+        yield (x, y)
+
+
 def get_train_datagen(img_width, batch_size=32):
     train_datagen = ImageDataGenerator(rescale=1.0 / 255, shear_range=0.2, zoom_range=0.2, horizontal_flip=True)
 

@@ -62,4 +62,4 @@ if __name__ == "__main__":
     initial_epoch = int(opts.get('--initial_epoch', 0))
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch)
+          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch, dropout=[dropout] * fc_layers)

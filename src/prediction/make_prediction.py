@@ -15,9 +15,10 @@ num_test_samples = 79726
 
 def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers = None, dropout=None):
     model = load_model(path_to_model, model_type, img_width=img_width,fc_layers=fc_layers,dropout=dropout)
-    generator = test_gen(img_width, 2, model_type)
+    test_batch_size = 32
+    generator = test_gen(img_width, 32, model_type)
     result = model.predict_generator(generator=generator, verbose=1,
-                                     steps=num_test_samples / 2)
+                                     steps=(int(float(num_test_samples) / test_batch_size) + 1))
     filenames = os.listdir(test_dir)
     if (steps is not None):
         filenames = filenames[0:steps * generator.batch_size]

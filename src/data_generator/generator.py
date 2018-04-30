@@ -239,12 +239,14 @@ def test_gen(img_size, batch_size, model_type):
     batch_size_index = 0
     while 1:
         x = []
+        count_of_files = 0
         for filename in os.listdir(test_dir)[batch_size_index * batch_size:batch_size * (batch_size_index + 1)]:
             img = get_im_cv2(os.path.join(test_dir, filename), img_size, model_type)
             x.append(img)
+            count_of_files = count_of_files + 1
         x = np.array(x)
         batch_size_index = batch_size_index + 1
-        x = x.reshape(batch_size, img_size, img_size, 3)
+        x = x.reshape(count_of_files, img_size, img_size, 3)
         yield (x)
 
 

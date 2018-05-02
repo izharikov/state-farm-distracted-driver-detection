@@ -26,7 +26,7 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     # Create your own model
     my_model = Model(input=inception_v3_model.input, output=x)
     for i in range(180):
-        model.layers[i].trainable = False
+        my_model.layers[i].trainable = False
     if summary:
         my_model.summary()
     return my_model

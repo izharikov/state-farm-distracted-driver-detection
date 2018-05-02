@@ -6,7 +6,7 @@ data
 
 # python cache
 __pycache__
-
+*.pyc
 # models
 /models
 drive

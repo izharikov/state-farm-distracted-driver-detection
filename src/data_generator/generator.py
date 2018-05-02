@@ -136,10 +136,10 @@ def get_im_cv2_aug(path, img_size, model_type):
     img = cv2.resize(img, (img_size, img_size))
 
     # normalization
-    if model_type in ['xception', 'inception_v3']:
+    if model_type in ['xception', 'inception_v3', 'vgg16', 'vgg19']:
         img /= 127.5
         img -= 1.
-    if model_type in ['resnet50', 'resnet152', 'vgg16', 'vgg19']:
+    if model_type in ['resnet50', 'resnet152']:
         img[:, :, 0] -= 103.939
         img[:, :, 1] -= 116.779
         img[:, :, 2] -= 123.68
@@ -156,10 +156,10 @@ def get_im_cv2(path, img_size, model_type):
     # normalization
 
     # normalization
-    if model_type in ['xception', 'inception_v3']:
+    if model_type in ['xception', 'inception_v3', 'vgg16', 'vgg19']:
         img /= 127.5
         img -= 1.
-    if model_type in ['resnet50', 'resnet152', 'vgg16', 'vgg19']:
+    if model_type in ['resnet50', 'resnet152']:
         img[:, :, 0] -= 103.939
         img[:, :, 1] -= 116.779
         img[:, :, 2] -= 123.68

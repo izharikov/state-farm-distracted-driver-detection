@@ -3,7 +3,8 @@ cp ../../drive/Colab\ Notebooks/kaggle.json /content/.kaggle/kaggle.json
 echo [INFO] Content of the file kaggle.json : $(cat /content/.kaggle/kaggle.json)
 chmod 600 /content/.kaggle/kaggle.json
 echo [INFO] Installing keras and kaggle
-pip install keras > /dev/null
+# pip install keras > /dev/null
+pip install -U --force-reinstall --no-dependencies git+https://github.com/datumbox/keras@bugfix/trainable_bn # temp fix to batch normalization layers
 pip install kaggle > /dev/null
 apt-get install tree > /dev/null
 #ln -s ../models ../../drive/Colab\ Notebooks/models

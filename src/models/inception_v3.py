@@ -14,10 +14,6 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
                                      input_shape=(img_width, img_width, 3))
     # return inception_v3_model
 
-    for layer in inception_v3_model.layers:
-        layer.trainable = False
-
-
     # Use the generated model
     output_inception_conv = inception_v3_model.output
 
@@ -29,11 +25,13 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
 
     # Create your own model
     my_model = Model(input=inception_v3_model.input, output=x)
+    for i in range(180):
+        model.layers[i].trainable = False
     if summary:
         my_model.summary()
     return my_model
 
 
 if __name__ == "__main__":
-    model = get_model(True, 229, fc_layers=[512], fc_dropout_layers=[0.3])
+    model = get_model(True, 299)
     print('Length', len(model.layers))

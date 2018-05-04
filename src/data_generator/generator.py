@@ -5,7 +5,7 @@ import keras
 from keras.preprocessing.image import ImageDataGenerator, array_to_img
 
 import models
-from config import train_dir, validation_dir, test_dir, data_path
+from config import train_dir, validation_dir, test_dir, data_path, normalize_zero, normalize_mean
 import numpy as np
 import os
 
@@ -136,10 +136,10 @@ def get_im_cv2_aug(path, img_size, model_type):
     img = cv2.resize(img, (img_size, img_size))
 
     # normalization
-    if model_type in ['xception', 'inception_v3', 'vgg16', 'vgg19', 'densenet', 'densenet121']:
+    if model_type in normalize_zero:
         img /= 127.5
         img -= 1.
-    if model_type in ['resnet50', 'resnet152', 'inception_v4' ]:
+    if model_type in normalize_mean:
         img[:, :, 0] -= 103.939
         img[:, :, 1] -= 116.779
         img[:, :, 2] -= 123.68

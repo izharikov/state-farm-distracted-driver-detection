@@ -1,4 +1,5 @@
-from models import simple_model, vgg16, vgg19, inception_v3, xception, resnet50, resnet152, densenet, inception_v4
+from models import simple_model, vgg16, vgg19, inception_v3, xception, resnet50, resnet152, densenet, inception_v4, \
+    inception_resnet_v2
 
 
 def get_model(modelType, img_width, print_summary=False, fc_layers=None, dropout=None):
@@ -20,4 +21,6 @@ def get_model(modelType, img_width, print_summary=False, fc_layers=None, dropout
         return densenet.get_model(print_summary, img_width, fc_layers, dropout)
     if modelType == 'inception_v4':
         return inception_v4.get_model(print_summary, img_width, fc_layers, dropout)
+    if modelType == 'inception_resnet_v2':
+        return inception_resnet_v2.get_model(print_summary, img_width, fc_layers, dropout)
     return None

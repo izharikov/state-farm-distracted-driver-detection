@@ -69,7 +69,7 @@ def conv2d_bn(x, nb_filter, num_row, num_col,
     return x
 
 
-def block_inception_a(input):
+def block_inception_a(input, idx):
     if K.image_data_format() == 'channels_first':
         channel_axis = 1
     else:
@@ -87,7 +87,7 @@ def block_inception_a(input):
     branch_3 = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(input)
     branch_3 = conv2d_bn(branch_3, 96, 1, 1)
 
-    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis)
+    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis, name="mixed_inception_a_{0}".format(idx))
     return x
 
 
@@ -105,11 +105,11 @@ def block_reduction_a(input):
 
     branch_2 = MaxPooling2D((3, 3), strides=(2, 2), padding='valid')(input)
 
-    x = concatenate([branch_0, branch_1, branch_2], axis=channel_axis)
+    x = concatenate([branch_0, branch_1, branch_2], axis=channel_axis, name="mixed_reduction_a")
     return x
 
 
-def block_inception_b(input):
+def block_inception_b(input, idx):
     if K.image_data_format() == 'channels_first':
         channel_axis = 1
     else:
@@ -130,7 +130,7 @@ def block_inception_b(input):
     branch_3 = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(input)
     branch_3 = conv2d_bn(branch_3, 128, 1, 1)
 
-    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis)
+    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis, name="mixed_inception_b_{0}".format(idx))
     return x
 
 
@@ -150,11 +150,11 @@ def block_reduction_b(input):
 
     branch_2 = MaxPooling2D((3, 3), strides=(2, 2), padding='valid')(input)
 
-    x = concatenate([branch_0, branch_1, branch_2], axis=channel_axis)
+    x = concatenate([branch_0, branch_1, branch_2], axis=channel_axis,name="mixed_reduction_b")
     return x
 
 
-def block_inception_c(input):
+def block_inception_c(input, idx):
     if K.image_data_format() == 'channels_first':
         channel_axis = 1
     else:
@@ -165,19 +165,19 @@ def block_inception_c(input):
     branch_1 = conv2d_bn(input, 384, 1, 1)
     branch_10 = conv2d_bn(branch_1, 256, 1, 3)
     branch_11 = conv2d_bn(branch_1, 256, 3, 1)
-    branch_1 = concatenate([branch_10, branch_11], axis=channel_axis)
+    branch_1 = concatenate([branch_10, branch_11], axis=channel_axis, name="mixed_reduction_c_1_{0}".format(idx))
 
     branch_2 = conv2d_bn(input, 384, 1, 1)
     branch_2 = conv2d_bn(branch_2, 448, 3, 1)
     branch_2 = conv2d_bn(branch_2, 512, 1, 3)
     branch_20 = conv2d_bn(branch_2, 256, 1, 3)
     branch_21 = conv2d_bn(branch_2, 256, 3, 1)
-    branch_2 = concatenate([branch_20, branch_21], axis=channel_axis)
+    branch_2 = concatenate([branch_20, branch_21], axis=channel_axis, name="mixed_reduction_c_2_{0}".format(idx))
 
     branch_3 = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(input)
     branch_3 = conv2d_bn(branch_3, 256, 1, 1)
 
-    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis)
+    x = concatenate([branch_0, branch_1, branch_2, branch_3], axis=channel_axis, name="mixed_reduction_c_{0}".format(idx))
     return x
 
 
@@ -196,7 +196,7 @@ def inception_v4_base(input):
 
     branch_1 = conv2d_bn(net, 96, 3, 3, strides=(2, 2), padding='valid')
 
-    net = concatenate([branch_0, branch_1], axis=channel_axis)
+    net = concatenate([branch_0, branch_1], axis=channel_axis, name="mixed_1")
 
     branch_0 = conv2d_bn(net, 64, 1, 1)
     branch_0 = conv2d_bn(branch_0, 96, 3, 3, padding='valid')
@@ -206,17 +206,17 @@ def inception_v4_base(input):
     branch_1 = conv2d_bn(branch_1, 64, 7, 1)
     branch_1 = conv2d_bn(branch_1, 96, 3, 3, padding='valid')
 
-    net = concatenate([branch_0, branch_1], axis=channel_axis)
+    net = concatenate([branch_0, branch_1], axis=channel_axis, name="mixed_2")
 
     branch_0 = conv2d_bn(net, 192, 3, 3, strides=(2, 2), padding='valid')
     branch_1 = MaxPooling2D((3, 3), strides=(2, 2), padding='valid')(net)
 
-    net = concatenate([branch_0, branch_1], axis=channel_axis)
+    net = concatenate([branch_0, branch_1], axis=channel_axis, name="mixed_3")
 
     # 35 x 35 x 384
     # 4 x Inception-A blocks
     for idx in range(4):
-        net = block_inception_a(net)
+        net = block_inception_a(net, idx)
 
     # 35 x 35 x 384
     # Reduction-A block
@@ -225,7 +225,7 @@ def inception_v4_base(input):
     # 17 x 17 x 1024
     # 7 x Inception-B blocks
     for idx in range(7):
-        net = block_inception_b(net)
+        net = block_inception_b(net, idx)
 
     # 17 x 17 x 1024
     # Reduction-B block
@@ -234,7 +234,7 @@ def inception_v4_base(input):
     # 8 x 8 x 1536
     # 3 x Inception-C blocks
     for idx in range(3):
-        net = block_inception_c(net)
+        net = block_inception_c(net, idx)
 
     return net
 

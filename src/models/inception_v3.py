@@ -28,6 +28,12 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     for i in range(180):
         my_model.layers[i].trainable = False
     if summary:
+        print("---------------------------------------------------------")
+        for i, layer in enumerate(my_model.layers):
+            print(i, layer.name)
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
         my_model.summary()
     return my_model
 

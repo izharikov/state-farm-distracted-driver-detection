@@ -15,9 +15,15 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
     model = Model(base_model.input, x)
 
-    for i in range(300):
+    for i in range(185):
         model.layers[i].trainable = False
     if summary:
+        print("---------------------------------------------------------")
+        for i, layer in enumerate(model.layers):
+            print(i, layer.name)
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
         model.summary()
     return model
 

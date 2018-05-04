@@ -27,9 +27,15 @@ def get_model(summary=False, img_width=299, fc_layers=[4096, 4096], fc_dropout_l
 
     # Create your own model
     my_model = Model(input=inception_resnet.input, output=x)
-    for i in range(int(len(my_model.layers) * 0.57)):
+    for i in range(273): # 273
         my_model.layers[i].trainable = False
     if summary:
+        print("---------------------------------------------------------")
+        for i, layer in enumerate(my_model.layers):
+            print(i, layer.name)
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
+        print("---------------------------------------------------------")
         my_model.summary()
     return my_model
 

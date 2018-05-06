@@ -19,7 +19,7 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     # Add the fully-connected layers
 
     x = AveragePooling2D((8, 8), padding='valid')(output_inception_conv)
-    x = Dropout(0.5)(x)
+    x = Dropout(0.2)(x)
     x = Flatten()(x)
     x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
 

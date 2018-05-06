@@ -239,7 +239,7 @@ def inception_v4_base(input):
     return net
 
 
-def inception_v4(num_classes=1000, dropout_keep_prob=0.5, weights='imagenet', include_top=False):
+def inception_v4(num_classes=1000, dropout_keep_prob=0.2, weights='imagenet', include_top=False):
     '''
     Creates the inception v4 network
 

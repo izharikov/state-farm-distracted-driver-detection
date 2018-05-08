@@ -317,6 +317,11 @@ def ResNet152(include_top=True, weights=None,
     if include_top:
         x = Flatten()(x)
         x = Dense(classes, activation='softmax', name='fc1000')(x)
+    # else:
+    #     if pooling == 'avg':
+    #         x = GlobalAveragePooling2D()(x)
+    #     elif pooling == 'max':
+    #         x = GlobalMaxPooling2D()(x)
 
     # Ensure that the model takes into account
     # any potential predecessors of `input_tensor`.

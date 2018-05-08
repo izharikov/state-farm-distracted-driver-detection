@@ -11,11 +11,10 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     base_model = ResNet152(input_tensor=x, weights='imagenet', include_top=False)
 
     x = GlobalAveragePooling2D()(base_model.output)
-    x = Dropout(0.5)(x)
     x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
     model = Model(base_model.input, x)
 
-    for i in range(185):
+    for i in range(674):
         model.layers[i].trainable = False
     if summary:
         print("---------------------------------------------------------")

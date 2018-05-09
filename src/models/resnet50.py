@@ -15,12 +15,12 @@ def get_model(summary=False, img_width=224, fc_layers=[4096, 4096], fc_dropout_l
     x = Dropout(0.5)(x)
     x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
     model = Model(base_model.input, x)
-
-    for i in range(77):
+    layers_to_freeze = 77
+    for i in range(layers_to_freeze):
         model.layers[i].trainable = False
     if summary:
         model.summary()
-    return model
+    return model, layers_to_freeze, 3
 
 
 if __name__ == "__main__":

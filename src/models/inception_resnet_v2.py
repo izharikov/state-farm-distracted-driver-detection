@@ -26,7 +26,8 @@ def get_model(summary=False, img_width=299, fc_layers=[4096, 4096], fc_dropout_l
 
     # Create your own model
     my_model = Model(input=inception_resnet.input, output=x)
-    for i in range(273): # 273
+    layers_to_freeze = 273
+    for i in range(layers_to_freeze): # 273
         my_model.layers[i].trainable = False
     if summary:
         print("---------------------------------------------------------")
@@ -36,7 +37,7 @@ def get_model(summary=False, img_width=299, fc_layers=[4096, 4096], fc_dropout_l
         print("---------------------------------------------------------")
         print("---------------------------------------------------------")
         my_model.summary()
-    return my_model
+    return my_model, layers_to_freeze, 2
 
 
 if __name__ == "__main__":

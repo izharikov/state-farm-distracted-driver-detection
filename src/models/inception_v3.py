@@ -35,9 +35,9 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
         print("---------------------------------------------------------")
         print("---------------------------------------------------------")
         my_model.summary()
-    return my_model
+    return my_model, 180, 3
 
 
 if __name__ == "__main__":
-    model = get_model(True, 299)
-    print('Length', len(model.layers))
+    model, first_stage, second_stage = get_model(True, 299)
+    print('Length', len(model.layers), first_stage, second_stage)

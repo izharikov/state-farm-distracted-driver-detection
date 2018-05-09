@@ -13,8 +13,8 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
     x = GlobalAveragePooling2D()(base_model.output)
     x = Dense(10, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(x)
     model = Model(base_model.input, x)
-
-    for i in range(674):
+    layers_to_freeze = 674
+    for i in range(layers_to_freeze):
         model.layers[i].trainable = False
     if summary:
         print("---------------------------------------------------------")
@@ -24,7 +24,7 @@ def get_model(summary=False, img_width=150, fc_layers=[4096, 4096], fc_dropout_l
         print("---------------------------------------------------------")
         print("---------------------------------------------------------")
         model.summary()
-    return model
+    return model, layers_to_freeze, 2
 
 
 if __name__ == "__main__":

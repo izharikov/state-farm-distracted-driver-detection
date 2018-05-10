@@ -6,15 +6,21 @@ import os
 from models import get_model
 
 
-def load_model(path_to_model, model_type, img_width, fc_layers,dropout):
-    model = get_model(modelType=model_type, print_summary=False, img_width=img_width, fc_layers=fc_layers, dropout=dropout)
+def load_model(path_to_model, model_type, img_width, fc_layers, dropout):
+    model = get_model(modelType=model_type, print_summary=False, img_width=img_width, fc_layers=fc_layers,
+                      dropout=dropout)
+    if (isinstance(model, tuple)):
+        model = model[0]
     model.load_weights(path_to_model)
     return model
 
+
 num_test_samples = 79726
 
-def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers = None, dropout=None):
-    model = load_model(path_to_model, model_type, img_width=img_width,fc_layers=fc_layers,dropout=dropout)
+
+def make_prediction(path_to_model, output_file_csv, model_type, steps=None, img_width=150, fc_layers=None,
+                    dropout=None):
+    model = load_model(path_to_model, model_type, img_width=img_width, fc_layers=fc_layers, dropout=dropout)
     test_batch_size = 32
     generator = test_gen(img_width, 32, model_type)
     result = model.predict_generator(generator=generator, verbose=1,

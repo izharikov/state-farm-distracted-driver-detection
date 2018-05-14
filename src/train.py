@@ -45,6 +45,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
             layer.trainable = True
     # model_opt = get_optimizer(optimizer_type, learning_rate)
     if weight_path is not None and len(weight_path) > 0:
+        print('[INFO] loading weights')
         model.load_weights(weight_path)
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
@@ -52,6 +53,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
 
     # train the convolutional neural network
     if not skip_first_stage:
+        print('[INFO] Start first stage')
         model.fit_generator(generator=train_generator, epochs=2,
                             steps_per_epoch=18304 / batch_size,
                             validation_steps=3328 / batch_size,
@@ -68,6 +70,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     model_opt = get_optimizer(optimizer_type, learning_rate)
     model.compile(loss='categorical_crossentropy', optimizer=model_opt, metrics=['accuracy'])
 
+    print('[INFO] Run train process')
     # train the convolutional neural network
     model.fit_generator(generator=train_generator, epochs=num_of_epochs + 2,
                         steps_per_epoch=18304 / batch_size,
@@ -75,6 +78,7 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
                         validation_data=validation_generator,
                         callbacks=get_callbacks(model_type, learning_rate, dyn_lr),
                         initial_epoch=2 + initial_epoch)
+    print('[INFO] End train process')
 
 
 if __name__ == "__main__":
@@ -97,4 +101,5 @@ if __name__ == "__main__":
     initial_epoch = int(opts.get('--initial_epoch', 0))
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch, dropout=[dropout] * fc_layers,skip_first_stage=skip_first_stage)
+          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch, dropout=[dropout] * fc_layers,
+          skip_first_stage=skip_first_stage)

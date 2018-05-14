@@ -34,7 +34,7 @@ def get_generators(generator, img_width, batch_size, model_type):
 
 def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='adam', print_summary=False,
           batch_size=32, learning_rate=5e-5, weight_path=None, fc_layers=None, dropout=None, generator='default',
-          dyn_lr=False, initial_epoch=0):
+          dyn_lr=False, initial_epoch=0, skip_first_stage=False):
     model, second_stage, first_stage = get_model(model_type, img_width, print_summary=print_summary,
                                                  fc_layers=fc_layers, dropout=dropout)
     # Run first stage
@@ -51,12 +51,13 @@ def train(model_type, num_of_epochs, data_set, img_width=150, optimizer_type='ad
     train_generator, validation_generator = get_generators(generator, img_width, batch_size, model_type)
 
     # train the convolutional neural network
-    model.fit_generator(generator=train_generator, epochs=2,
-                        steps_per_epoch=18304 / batch_size,
-                        validation_steps=3328 / batch_size,
-                        validation_data=validation_generator,
-                        callbacks=get_callbacks(model_type, 0.001, False),
-                        initial_epoch=0)
+    if not skip_first_stage:
+        model.fit_generator(generator=train_generator, epochs=2,
+                            steps_per_epoch=18304 / batch_size,
+                            validation_steps=3328 / batch_size,
+                            validation_data=validation_generator,
+                            callbacks=get_callbacks(model_type, 0.001, False),
+                            initial_epoch=0)
     # Run second stage
     if first_stage is not None and second_stage is not None:
         for layer in model.layers[:second_stage]:
@@ -84,6 +85,7 @@ if __name__ == "__main__":
     width = int(opts.get('--width', '150'))
     optimizer = opts.get('--optimizer', 'adam')
     print_summary = opts.get('--summary', 'False') == 'True'
+    skip_first_stage = opts.get('--skip_first_stage', 'False') == 'True'
     batch_size = int(opts.get('--batch', '32'))
     lr = float(opts.get('--lr', '5e-5'))
     weight_path = opts.get('--weight_path', None)
@@ -95,4 +97,4 @@ if __name__ == "__main__":
     initial_epoch = int(opts.get('--initial_epoch', 0))
     train(model_type, num_of_epochs, data_set, img_width=width, optimizer_type=optimizer, print_summary=print_summary,
           batch_size=batch_size, learning_rate=lr, weight_path=weight_path, fc_layers=[fc_width] * fc_layers,
-          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch, dropout=[dropout] * fc_layers)
+          generator=generator, dyn_lr=dyn_lr, initial_epoch=initial_epoch, dropout=[dropout] * fc_layers,skip_first_stage=skip_first_stage)
